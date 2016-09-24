@@ -8,6 +8,10 @@ block content
 			ul.exercisesList
 				each exo in workout.exercises
 					li=exo
+			if workout.workoutCreator == user.username
+				form
+					input(type='hidden' name='id' id='id' value=workout._id)
+					input(type='submit' value='Delete Workout').btn.btn-info.delete_btn 
 
 	if user
 		button.btn.btn-info#btn-workout Create New Workout
@@ -19,8 +23,9 @@ block content
 				label.label-form Choose your exercises
 				br
 				each exercise in exercises
-					label(for=exercise.exerciseName)=exercise.exerciseName
-					input(type='checkbox' name='exerciseName' id=exercise.exerciseName value=exercise.exerciseName) 
+					if exercise.exerciseName !== 'Break'
+						label(for=exercise.exerciseName)=exercise.exerciseName
+						input(type='checkbox' name='exerciseName' id=exercise.exerciseName value=exercise.exerciseName) 
 			.form-group
 				button.btn.btn-danger Submit New Workout
 	if !user
