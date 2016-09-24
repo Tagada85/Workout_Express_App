@@ -9,6 +9,7 @@ const passport = require('passport');
 const session = require('express-session');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const MongoStore = require('connect-mongo')(session);
+const User = require('./models/User');
 
 var routes = require('./routes/index');
 
@@ -29,7 +30,7 @@ db.on('error', (err)=>{
 passport.use(new TwitterStrategy({
     consumerKey: 'aMIKXy7zeRyzaYvGcgnGh0RA2',
     consumerSecret: 'Uy8VER1wTXNaTWc88AQyr0BJNoXlTWxakVPkWCTDZF7uyBOx92',
-    callbackURL: "https://127.0.0.1:3000/auth/twitter/return"
+    callbackURL: "http://127.0.0.1:3000/auth/twitter/return"
   },
   function(token, tokenSecret, profile, done) {
     console.log(profile);

@@ -7,7 +7,7 @@ let UserSchema = new Schema({
 	firstName: String,
 	lastName: String,
 	email: String,
-	pastWorkouts: [{time: Number, Workout}]
+	pastWorkouts: [{time: Number, workout: [String]}]
 });
 
 let User = mongoose.model('User', UserSchema);

@@ -15,8 +15,14 @@ html
                     a(href='/') Home
                 li
                     a(href='/workouts_list') Workouts List
-                li
-                    a(href='/workout_choice') Choose Workout
-                li
-                    a(href='/profile') Profile
+                if user
+                    li
+                        a(href='/workout_choice') Choose Workout
+                    li
+                        a(href='/profile') Profile
+                else
+                    li
+                        a(href='http://127.0.0.1:3000/auth/twitter') Login Twitter
+        if user
+            h1='Hello ' + user.username
         block content
