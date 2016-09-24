@@ -15,12 +15,6 @@ var routes = require('./routes/index');
 
 var app = express();
 
-User.findOne({username: 'Damien Cosset'}, (err, user)=>{
-  if(err) throw err;
-  user.pastWorkouts = [];
-  user.save();
-});
-
 //db config
 mongoose.connect('mongodb://Tagada85:kallon85@ds047642.mlab.com:47642/workout_app');
 const db = mongoose.connection;
@@ -39,7 +33,6 @@ passport.use(new TwitterStrategy({
     callbackURL: "https://thawing-waters-90908.herokuapp.com/auth/twitter/return"
   },
   function(token, tokenSecret, profile, done) {
-    console.log(profile);
     User.findOneAndUpdate({ username: profile.displayName},
       {
         username: profile.displayName
