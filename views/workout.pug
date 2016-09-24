@@ -7,7 +7,7 @@ block content
 	#exercise
 	#next
 
-	script(src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous")
+	script( src="https://code.jquery.com/jquery-3.1.1.js"   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="   crossorigin="anonymous")
 	script.
 		let length = "#{length}" * 60;
 		let workout = !{JSON.stringify(workout)};
@@ -16,6 +16,7 @@ block content
 		let randomExercisesAndBreaks = [];
 		let count = 0;
 		let countExercises = 0;
+		let workoutName = workout.workoutName;
 
 		while(count < length){
 			if(countExercises == 4  || countExercises == 9 || countExercises == 14
@@ -96,10 +97,12 @@ block content
 				if (--timer < 0) {
 					clearInterval(workoutTimer);
 					displayTimer.innerHTML = "Congrats!! You've finished!!";
-					clearInterval(workTimer);
-					idx = 0;
-					//end of workout
-					//create a post route to add workout to user
+					$.post('/end_workout' ,{time: duration, workout: workoutName}
+					, function(data){
+						let intervalSuccess = setInterval(function(){
+							document.location.replace('/profile');
+						}, 1500);
+					});
 				}
 
 				if(randomExercisesAndBreaks[idx] == 'Break' && breakTime-- <= 1){

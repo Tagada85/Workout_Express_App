@@ -3,6 +3,7 @@ var router = express.Router();
 const mongoose = require('mongoose');
 const Exercise = require('../models/Exercise').Exercise;
 const Workout = require('../models/Workout');
+const User = require('../models/User');
 const passport = require('passport');
 
 
@@ -13,7 +14,12 @@ router.get('/', function(req, res, next) {
 
 /* GET profile Page */
 router.get('/profile', (req,res,next)=>{
-	res.render('profile', {title:'Profile Page', user: req.session.user});
+	User.findOne({username: req.session.user.username}, (err, user)=>{
+		if(err) return next(err);
+		console.log(user);
+		console.log(req.session.user);
+		res.render('profile', {title:'Profile Page', user: req.session.user, userProfile: user});
+	})
 });
 
 /* GET List of Workout Page */
@@ -28,6 +34,15 @@ router.get('/workouts_list', (req, res, next)=>{
 		
 	})
 	
+});
+
+router.get('/logout', (req, res, next)=>{
+	if(req.session){
+		req.session.destroy((err)=>{
+			if(err) return next(err);
+			res.redirect('/');
+		});
+	}
 });
 
 /* GET start Workout Page */
@@ -47,8 +62,11 @@ router.get('/auth/twitter/return',
   passport.authenticate('twitter', { failureRedirect: '/' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    req.session.user = req.user;
-    res.redirect("/");
+    User.findOne({username: req.user.username}, (err, user)=>{
+    	if(err) return next(err);
+    	req.session.user = user;
+    	res.redirect('/');
+    });
   });
 
 
@@ -56,6 +74,10 @@ router.get('/auth/twitter/return',
 router.post('/workout', (req, res, next)=>{
 	let length = req.body.time;
 	let workoutName = req.body.workout;
+	if(!length){
+		let err = new Error('You must enter a length to start a workout!');
+		return next(err);
+	}
 	let promise = getExercises();
 	promise.then((exercises)=>{
 		Workout.findOne({workoutName: workoutName}, (err, workout)=>{
@@ -86,6 +108,19 @@ router.post('/workouts_list', (req, res, next)=>{
 		});
 	})
 	
+});
+
+router.post('/end_workout', (req, res, next)=>{
+	let timeInSeconds = req.body.time;
+	let workoutLength = parseInt(timeInSeconds) / 60;
+	let workoutName = req.body.workout;
+	User.findOne({username: req.session.user.username}, (err, user)=>{
+		if(err) return next(err);
+		user.pastWorkouts.push({time: workoutLength, workout: workoutName});
+		user.save();
+		//res.render('profile', {title: 'Profile Page', user: req.session.user, userProfile: user});
+	});
+	res.redirect('/profile');
 });
 
 /* PUT Modify Workout I created */

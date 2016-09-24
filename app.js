@@ -15,6 +15,12 @@ var routes = require('./routes/index');
 
 var app = express();
 
+User.findOne({username: 'Damien Cosset'}, (err, user)=>{
+  if(err) throw err;
+  user.pastWorkouts = [];
+  user.save();
+});
+
 //db config
 mongoose.connect('mongodb://localhost:27017/workout');
 const db = mongoose.connection;

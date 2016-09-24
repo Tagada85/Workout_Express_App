@@ -1,6 +1,7 @@
 body {
   padding: 20px;
   font: 14px "Nunito", Helvetica, Arial, sans-serif;
+  text-align: center;
 }
 
 a {
@@ -30,6 +31,32 @@ header:after{
 	max-width: 150px;
 }
 
+.workout{
+	border: 1px solid black;
+	font-size: 16px;
+	padding: 10px;
+	background-color: #a94442;
+}
+
+.workout ul{
+	list-style: none;
+	margin-top: 10px;
+}
+
 video{
 	max-width: 50%;
+}
+
+.label-form{
+	color: #a94442;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+#btn-workout{
+	margin-top: 20px;
+}
+
+.home-paragraph{
+	font-size: 15px;
 }
