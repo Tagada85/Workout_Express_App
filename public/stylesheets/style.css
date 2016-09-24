@@ -60,3 +60,42 @@ video{
 .home-paragraph{
 	font-size: 15px;
 }
+
+#pageTimer{
+	font-size: 35px;
+	color: #a94442;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+#currentExoTimer{
+	font-size: 30px;
+	color: #00B7FF;
+	display: inline-block;
+}
+
+#exercise{
+	display: inline-block;
+}
+
+#next{
+	display: inline-block;
+	font-size: 15px;	
+}
+
+.delete_btn{
+	margin-left: 50px;
+}
+
+.past-workout{
+	border: 2px solid #a94442;
+}
+
+.past-workout .time{
+	font-size: 50px;
+}
+
+.past-workout .name{
+	font-size: 30px;
+	font-weight: bold;
+}

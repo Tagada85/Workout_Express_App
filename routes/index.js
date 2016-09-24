@@ -94,7 +94,7 @@ router.post('/workouts_list', (req, res, next)=>{
 	let exercises = req.body.exerciseName;
 	let workout = new Workout;
 	workout.workoutName = workoutName;
-	workout.workoutCreator = 'Admin';
+	workout.workoutCreator = req.session.user.username;
 	for(let i =0; i< exercises.length; i++){
 		workout.exercises.push(exercises[i]);
 	}
@@ -118,7 +118,6 @@ router.post('/end_workout', (req, res, next)=>{
 		if(err) return next(err);
 		user.pastWorkouts.push({time: workoutLength, workout: workoutName});
 		user.save();
-		//res.render('profile', {title: 'Profile Page', user: req.session.user, userProfile: user});
 	});
 	res.redirect('/profile');
 });
@@ -126,6 +125,16 @@ router.post('/end_workout', (req, res, next)=>{
 /* PUT Modify Workout I created */
 
 /* DELETE Workout created */
+router.delete('/delete_workout/:id', (req, res, next)=>{
+	let id = req.params.id;
+	Workout.findById({_id: id}, (err, workout)=>{
+		console.log(workout);
+		if(err) return next(err);
+		workout.remove();
+		res.redirect('/workouts_list');
+	});
+})
+
 
 function getExercises(){
 	let promise = Exercise.find({}).exec();

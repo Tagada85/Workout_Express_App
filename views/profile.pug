@@ -5,7 +5,7 @@ block content
 		if userProfile.pastWorkouts.length != 0
 			each workouts in userProfile.pastWorkouts
 				div.past-workout
-					p Length of the workout: #{workouts.time} minutes
-					p Name of the Workout: #{workouts.workoutName}
+					p.time Length : #{workouts.time} minutes
+					p.name Name : #{workouts.workout}
 		else
 			p You don't have any workouts yet
