@@ -1,0 +1,14 @@
+extends layout
+block content
+	h1 Choose your workout
+	form(action='/workout', method='POST').horizontal-form
+		.form-group
+			label(for='time') Time (minutes) :
+			input(type='number' name='time' id='time' min='5')
+		.form-group
+			select(name='workout')
+				each workout in workouts
+					option(name=workout.workoutName value=workout.workoutName)=workout.workoutName
+		.form-group
+			input(type='submit' value='Start Workout').btn.btn-info 
+

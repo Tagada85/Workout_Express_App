@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+    link(href="https://fonts.googleapis.com/css?family=Nunito", rel="stylesheet")
+    script(src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous")
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    .container
+        header
+            img.pull-left.logo.col-xs-2(src='/images/yoga.jpg')
+            ul.nav.nav-tabs.pull-right
+                li
+                    a(href='/') Home
+                li
+                    a(href='/workouts_list') Workouts List
+                li
+                    a(href='/workout_choice') Choose Workout
+                li
+                    a(href='/profile') Profile
+        block content

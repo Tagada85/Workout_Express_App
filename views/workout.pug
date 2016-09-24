@@ -1,0 +1,145 @@
+extends layout
+block content
+	h3='Current Workout : ' + workout.workoutName 
+	span#motiv
+	#pageTimer
+	#currentExoTimer
+	#exercise
+	#next
+
+	script(src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous")
+	script.
+		let length = "#{length}" * 60;
+		let workout = !{JSON.stringify(workout)};
+		let exercises = workout.exercises;
+		let allExercises = !{JSON.stringify(exercises)};
+		let randomExercisesAndBreaks = [];
+		let count = 0;
+		let countExercises = 0;
+
+		while(count < length){
+			if(countExercises == 4  || countExercises == 9 || countExercises == 14
+			|| countExercises == 18 || countExercises == 23 || countExercises == 28 ||
+			countExercises == 33 || countExercises == 38 || countExercises == 43){
+				randomExercisesAndBreaks.push('Break');
+				count += 45;
+				countExercises++;
+			}else{
+				randomExercisesAndBreaks.push(getRandomExercise(exercises));
+				count += 50;
+				countExercises++;
+			}
+		}
+
+		function startTimer(duration, displayTimer, displayExercise) {
+			let timer = duration;
+			let minutes;
+			let seconds;
+			let idx = 0;
+			let workTime = 50;
+			let breakTime = 45;
+			let currentExoTimer = document.getElementById('currentExoTimer');
+
+
+			function startWorkTimer(){
+
+				displayCurrentExercise(idx);
+				displayNextExercise(idx);
+				let workTimer = setInterval(function(){	
+					idx++;
+					
+					displayCurrentExercise(idx);
+					displayNextExercise(idx);
+
+
+					if(randomExercisesAndBreaks[idx] == 'Break'){
+						clearInterval(workTimer);
+						startBreakTimer();
+					}
+			   }, 50500);
+
+			}
+
+		   function startBreakTimer(){
+			   let breakTimer = setInterval(function(){
+					idx++;
+					clearInterval(breakTimer);
+					startWorkTimer();
+			   }, 45500)
+		   }
+			
+
+		   startWorkTimer();
+			let workoutTimer = setInterval(function () {
+				
+				minutes = parseInt(timer / 60, 10);
+				seconds = parseInt(timer % 60, 10);
+
+				minutes = minutes < 10 ? "0" + minutes : minutes;
+				seconds = seconds < 10 ? "0" + seconds : seconds;
+
+				displayTimer.innerHTML = minutes + ":" + seconds;
+
+
+				
+				if(randomExercisesAndBreaks[idx] == 'Break'){
+					currentExoTimer.innerHTML = breakTime;
+					displayExercise.style.background = 'lightblue';
+					document.getElementById('motiv').innerHTML = 'Take a break!';
+				}else{
+					currentExoTimer.innerHTML = workTime;
+					displayExercise.style.background = '#b2e672';
+					document.getElementById('motiv').innerHTML = 'GOGOGO !!';
+				}
+				
+
+				if (--timer < 0) {
+					clearInterval(workoutTimer);
+					displayTimer.innerHTML = "Congrats!! You've finished!!";
+					clearInterval(workTimer);
+					idx = 0;
+					//end of workout
+					//create a post route to add workout to user
+				}
+
+				if(randomExercisesAndBreaks[idx] == 'Break' && breakTime-- <= 1){
+					breakTime = 45;
+				}else if(workTime-- <= 1){
+					workTime = 50;
+				}
+			}, 1000);
+		}
+
+		function getRandomExercise(exercises){
+			let index = Math.round(Math.random() * (exercises.length-1) );
+			return exercises[index];
+		}
+
+		function displayCurrentExercise(idx){
+			for(let i = 0; i<allExercises.length; i++){
+				if(randomExercisesAndBreaks[idx] == allExercises[i].exerciseName){
+					document.getElementById('exercise').innerHTML =  "<h3>" + randomExercisesAndBreaks[idx] +"</h3><video src='/videos/" + allExercises[i].videoUrl +"' autoplay loop muted />";
+				}
+			}
+		}
+
+		function displayNextExercise(idx){
+			let nextExercise = randomExercisesAndBreaks[idx+1];
+				for(let j = 0; j< allExercises.length; j++){
+					if(nextExercise == allExercises[j].exerciseName){
+						document.getElementById('next').innerHTML = '<p>Next Exercise: ' + nextExercise
+				+ "<img src='/images/" + allExercises[j].thumbnail + "' class='thumbnail'/></p>";
+					}
+				}
+		}
+
+
+
+		window.onload = function () {
+			var time = length,
+				displayTimer = document.querySelector('#pageTimer');
+			let displayExercise = document.querySelector('#exercise');
+			startTimer(time, displayTimer, displayExercise);
+		};
+
+

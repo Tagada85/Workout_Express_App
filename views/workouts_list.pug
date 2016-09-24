@@ -1,0 +1,40 @@
+extends layout
+block content
+	h1 Here is a list of workout
+	each workout in workouts
+		.workout
+			a(href='#').workoutName=workout.workoutName 
+			span='     By ' + workout.workoutCreator
+			ul.exercisesList
+				each exo in workout.exercises
+					li=exo
+
+	button.btn.btn-info#btn-workout Create New Workout
+	form(action='/workouts_list' method='POST').form-horizontal#new-workout-form
+		.form-group
+			label(for='name') Name
+			input(type='text' name='name' id='name')
+		.form-group
+			label Choose your exercises
+			br
+			each exercise in exercises
+				label(for=exercise.exerciseName)=exercise.exerciseName
+				input(type='checkbox' name='exerciseName' id=exercise.exerciseName value=exercise.exerciseName) 
+		.form-group
+			button.btn.btn-danger Submit New Workout
+	script.
+		let btn = document.getElementById('btn-workout');
+		let form = document.getElementById('new-workout-form');
+		form.style.display = 'none';
+
+		btn.onclick = function(){
+			form.style.display == 'block' ? form.style.display = 'none' : form.style.display = 'block'
+		}
+
+		$('.workout ul').hide();
+		let workoutNames = $('.workoutName');
+		workoutNames.each(function(){
+			$(this).click(function(){
+				$(this).siblings('ul').toggle();
+			})
+		})
