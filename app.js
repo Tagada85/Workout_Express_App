@@ -32,6 +32,7 @@ passport.use(new TwitterStrategy({
     callbackURL: "https://127.0.0.1:3000/auth/twitter/return"
   },
   function(token, tokenSecret, profile, done) {
+    console.log(profile);
     User.findOneAndUpdate({ username: profile.displayName},
       {
         username: profile.displayName
