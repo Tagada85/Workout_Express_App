@@ -22,7 +22,7 @@ User.findOne({username: 'Damien Cosset'}, (err, user)=>{
 });
 
 //db config
-mongoose.connect('mongodb://localhost:27017/workout');
+mongoose.connect('mongodb://Tagada85:kallon85@ds047642.mlab.com:47642/workout_app');
 const db = mongoose.connection;
 mongoose.Promise = global.Promise;
 db.on('open', ()=>{
@@ -36,7 +36,7 @@ db.on('error', (err)=>{
 passport.use(new TwitterStrategy({
     consumerKey: 'aMIKXy7zeRyzaYvGcgnGh0RA2',
     consumerSecret: 'Uy8VER1wTXNaTWc88AQyr0BJNoXlTWxakVPkWCTDZF7uyBOx92',
-    callbackURL: "http://127.0.0.1:3000/auth/twitter/return"
+    callbackURL: "https://thawing-waters-90908.herokuapp.com/auth/twitter/return"
   },
   function(token, tokenSecret, profile, done) {
     console.log(profile);

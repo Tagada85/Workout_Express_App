@@ -128,7 +128,6 @@ router.post('/end_workout', (req, res, next)=>{
 router.delete('/delete_workout/:id', (req, res, next)=>{
 	let id = req.params.id;
 	Workout.findById({_id: id}, (err, workout)=>{
-		console.log(workout);
 		if(err) return next(err);
 		workout.remove();
 		res.redirect('/workouts_list');
